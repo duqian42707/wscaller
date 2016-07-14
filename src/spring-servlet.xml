@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd">
+	
+   	<!-- 扫描加载注解Bean -->
+	<!-- [use-default-filters="false"的情况下：]
+	<context:exclude-filter>指定的不扫描，<context:include-filter>指定的扫描
+	 -->
+	<context:component-scan base-package="com.wscaller">
+		<!-- <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/> -->
+	</context:component-scan>
+
+    <!-- don't handle the static resource -->
+    <mvc:default-servlet-handler />
+
+    <!-- if you use annotation you must configure following setting -->
+    <mvc:annotation-driven />
+    
+    <!-- configure the InternalResourceViewResolver -->
+    <bean id="internalResourceViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver" >
+        <!-- 前缀 -->
+        <property name="prefix" value="/" />
+        <!-- 后缀 -->
+        <property name="suffix" value=".jsp" />
+    </bean>
+    
+    <!-- if you need to upload files -->
+<!--    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver" >
+	    <property name="defaultEncoding" value="UTF-8"/> &lt;!&ndash; 默认编码  &ndash;&gt;
+	    <property name="maxInMemorySize" value="10240"/> &lt;!&ndash; 最大内存大小&ndash;&gt;
+	    <property name="maxUploadSize" value="-1"/> &lt;!&ndash; 最大文件大小，-1为无限制 &ndash;&gt;
+	</bean>-->
+</beans>
