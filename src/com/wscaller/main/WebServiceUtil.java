@@ -26,7 +26,7 @@ public class WebServiceUtil {
      * @param wsdl
      * @return
      */
-    public static List<String> getOperations(String wsdl) {
+    public static List getOperations(String wsdl) {
         return getOperations(wsdl, OPREATION_ORDER_DEFAULT);
     }
 
@@ -37,7 +37,7 @@ public class WebServiceUtil {
      * @param order 顺序 0默认 1按字母顺序
      * @return
      */
-    public static List<String> getOperations(String wsdl, String order) {
+    public static List getOperations(String wsdl, String order) {
         JaxWsDynamicClientFactory dcf = JaxWsDynamicClientFactory.newInstance();
         Client client = dcf.createClient(wsdl);
         HTTPClientPolicy policy = new HTTPClientPolicy();
@@ -47,13 +47,36 @@ public class WebServiceUtil {
         conduit.setClient(policy);
         Endpoint endpoint = client.getEndpoint();
         BindingInfo bindingInfo = endpoint.getEndpointInfo().getBinding();
-        List<String> list = new ArrayList();
+        List<Map<String,Object>> list = new ArrayList();
         for (BindingOperationInfo operationInfo : bindingInfo.getOperations()) {
+            Map<String,Object> opt = new HashMap<>();
             String operation = operationInfo.getName().getLocalPart();
-            list.add(operation);
+            opt.put("operationName",operation);
+
+            BindingMessageInfo inputMessageInfo = operationInfo.getInput();
+            List<MessagePartInfo> parts = inputMessageInfo.getMessageParts();
+            MessagePartInfo partInfo = parts.get(0);
+            Class<?> partClass = partInfo.getTypeClass();
+            Field[] fields = partClass.getDeclaredFields();
+            List<Map> paramsList = new ArrayList<>();
+            for (int i = 0; i < fields.length; i++) {
+                Map<String, String> map = new HashMap();
+                map.put("FIELD_NAME", fields[i].getName());
+                map.put("FIELD_TYPE", fields[i].getType().getName());
+                paramsList.add(map);
+            }
+            opt.put("params",paramsList);
+            list.add(opt);
         }
         if (OPREATION_ORDER_NAME.equals(order)) {
-            Collections.sort(list);
+            Collections.sort(list, new Comparator<Map<String, Object>>() {
+                @Override
+                public int compare(Map<String, Object> o1, Map<String, Object> o2) {
+                    String name1 = (String) o1.get("operationName");
+                    String name2 = (String) o2.get("operationName");
+                    return name1.compareTo(name2);
+                }
+            });
         }
         return list;
     }

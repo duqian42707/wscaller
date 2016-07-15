@@ -22,7 +22,7 @@ public class MainController {
 
     @RequestMapping(value = "/getOperations")
     public String getOperations(HttpServletResponse response, String wsdl, ModelMap map){
-        List<String> list = WebServiceUtil.getOperations(wsdl);
+        List<Map<String,Object>> list = WebServiceUtil.getOperations(wsdl);
         String jsonStr = JsonUtil.toJson(list);
         ResponseUtil.sendHtml(response,jsonStr);
         return null;

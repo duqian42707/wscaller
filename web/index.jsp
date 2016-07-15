@@ -54,6 +54,7 @@
 </textarea>
 </body>
 <script>
+    var operations=[];
     $(function () {
         $('#operation').change(function () {
             if ($(this).val() != '') {
@@ -67,31 +68,30 @@
             data: {wsdl: $('#wsdl').val()},
             dataType: 'json',
             success: function (data) {
+                operations=data;
                 $('#operation').empty();
                 $('#operation').append('<option>请选择</option>');
                 for (var i = 0; i < data.length; i++) {
-                    $('#operation').append('<option value="' + data[i] + '">' + data[i] + '</option>')
+                    $('#operation').append('<option value="' + data[i]['operationName'] + '">' + data[i]['operationName'] + '</option>')
                 }
             }
         });
     }
     function getParams() {
-        $.ajax({
-            url: '<%=request.getContextPath()%>/wscaller/getParams',
-            data: {wsdl: $('#wsdl').val(), operation: $('#operation').val()},
-            dataType: 'json',
-            success: function (data) {
-                $('#paramTable').empty();
-                for (var i = 0; i < data.length; i++) {
+        $('#paramTable').empty();
+        for (var i = 0; i < operations.length; i++) {
+            if($('#operation').val()==operations[i]['operationName']){
+                var params = operations[i]['params']
+                for(var j=0;j<params.length;j++){
                     var tr = '<tr>' +
-                            '<td>Parameter' + (i + 1) + ':<input disabled value="' + data[i]['FIELD_NAME'] + '"/></td>' +
-                            '<td>Type:<input disabled value="' + data[i]['FIELD_TYPE'] + '"/></td>' +
+                            '<td>Parameter' + (j + 1) + ':<input disabled value="' + params[j]['FIELD_NAME'] + '"/></td>' +
+                            '<td>Type:<input disabled value="' + params[j]['FIELD_TYPE'] + '"/></td>' +
                             '<td>value:<input class="valinput"/></td>' +
                             '</tr>';
                     $('#paramTable').append(tr)
                 }
             }
-        });
+        }
     }
     function invoke() {
         var paramData = []
