@@ -11,50 +11,43 @@
 <head>
     <meta charset="UTF-8">
     <title>首页</title>
+    <link href="css/index.css" rel="stylesheet" type="text/css"/>
     <script src="<%=request.getContextPath()%>/resources/jquery-1.12.0.min.js"></script>
     <style>
-        .div_param{
-            border: 1px solid grey;
-            height: 300px;
-            width:90%;
-        }
-        #result{
-            height: 200px;
-            width: 90%;
-        }
+
     </style>
 </head>
 <body>
-<div>
-    <table>
-        <tr>
-            <td>WSDL Location</td>
-            <td><input id="wsdl" name="wsdl"></td>
-            <td><input type="button" onclick="getOperations()" value="find"></td>
-        </tr>
-        <tr>
-            <td>Operation</td>
-            <td>
-                <select id="operation">
+<div class="body">
+    <div>
+        <table class="optionTable">
+            <tr>
+                <td>WSDL Location</td>
+                <td><input id="wsdl" name="wsdl"></td>
+                <td><input class="btn" type="button" onclick="getOperations()" value="find" ></td>
+            </tr>
+            <tr>
+                <td>Operation</td>
+                <td><select id="operation">
                     <option value="">请选择</option>
-                </select>
-            </td>
-        </tr>
-    </table>
-</div>
-<div class="div_param">
-    <table id="paramTable">
-    </table>
-</div>
-<div>
-    <input value="invoke" type="button" onclick="invoke()"/>
-</div>
+                </select></td>
+            </tr>
+        </table>
+    </div>
+    <div class="div_param">
+        <table id="paramTable">
+        </table>
+    </div>
+    <div>
+        <input value="invoke" class="btn" type="button" onclick="invoke()"/>
+    </div>
 <textarea id="result">
 
 </textarea>
+</div>
 </body>
 <script>
-    var operations=[];
+    var operations = [];
     $(function () {
         $('#operation').change(function () {
             if ($(this).val() != '') {
@@ -68,7 +61,7 @@
             data: {wsdl: $('#wsdl').val()},
             dataType: 'json',
             success: function (data) {
-                operations=data;
+                operations = data;
                 $('#operation').empty();
                 $('#operation').append('<option>请选择</option>');
                 for (var i = 0; i < data.length; i++) {
@@ -80,9 +73,9 @@
     function getParams() {
         $('#paramTable').empty();
         for (var i = 0; i < operations.length; i++) {
-            if($('#operation').val()==operations[i]['operationName']){
+            if ($('#operation').val() == operations[i]['operationName']) {
                 var params = operations[i]['params']
-                for(var j=0;j<params.length;j++){
+                for (var j = 0; j < params.length; j++) {
                     var tr = '<tr>' +
                             '<td>Parameter' + (j + 1) + ':<input disabled value="' + params[j]['FIELD_NAME'] + '"/></td>' +
                             '<td>Type:<input disabled value="' + params[j]['FIELD_TYPE'] + '"/></td>' +

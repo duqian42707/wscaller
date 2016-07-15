@@ -1,0 +1,47 @@
+body{
+    padding: 0;
+    margin:0;
+}
+div.body{
+    width:1000px;
+    margin: 10px auto;
+}
+#wsdl{
+    outline: none;
+    font-family: 微软雅黑;
+    font-size: 16px;
+    text-indent: 5px;
+    height: 30px;
+    width:500px;
+    border:1px solid #aaa;
+}
+.btn:hover{
+}
+.btn{
+    color: white;
+    background-color: #53cbf3;
+    cursor:pointer;
+    outline: none;
+    width: 80px;
+    border:none;
+    height: 30px;
+    border-radius: 5px;
+}
+#operation{
+    outline: none;
+    font-family: 微软雅黑;
+    font-size: 16px;
+    text-indent: 2px;
+    height: 30px;
+    width: 500px;
+    border:1px solid #aaa;
+}
+.div_param{
+    border: 1px solid grey;
+    height: 300px;
+    width:90%;
+}
+#result{
+    height: 200px;
+    width: 90%;
+}
