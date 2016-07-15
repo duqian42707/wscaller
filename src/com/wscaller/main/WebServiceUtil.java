@@ -1,12 +1,6 @@
 package com.wscaller.main;
 
-import java.lang.reflect.Field;
-import java.util.*;
-
-import javax.wsdl.Operation;
-import javax.xml.namespace.QName;
-
-import com.wscaller.interceptor.InfoInterceptor;
+import com.wscaller.util.EncryptUtil;
 import org.apache.cxf.endpoint.Client;
 import org.apache.cxf.endpoint.Endpoint;
 import org.apache.cxf.jaxws.endpoint.dynamic.JaxWsDynamicClientFactory;
@@ -17,7 +11,10 @@ import org.apache.cxf.service.model.MessagePartInfo;
 import org.apache.cxf.transport.http.HTTPConduit;
 import org.apache.cxf.transports.http.configuration.HTTPClientPolicy;
 
-import com.wscaller.interceptor.ClientInterceptor;
+import javax.xml.namespace.QName;
+import java.lang.reflect.Field;
+import java.util.*;
+
 
 public class WebServiceUtil {
     public static final String OPREATION_ORDER_DEFAULT = "0";
@@ -147,8 +144,7 @@ public class WebServiceUtil {
         } else {
             Object[] objs = new Object[params.size()];
             for (int i = 0; i < params.size(); i++) {
-//				objs[i]=EncryptUtil.getEncrypt(params.get(i));
-                objs[i] = params.get(i);
+				objs[i]= EncryptUtil.getEncrypt(params.get(i));
             }
             return client.invoke(opName, objs);
         }
