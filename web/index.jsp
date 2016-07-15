@@ -12,25 +12,43 @@
     <meta charset="UTF-8">
     <title>首页</title>
     <script src="<%=request.getContextPath()%>/resources/jquery-1.12.0.min.js"></script>
+    <style>
+        .div_param{
+            border: 1px solid grey;
+            height: 300px;
+            width:90%;
+        }
+        #result{
+            height: 200px;
+            width: 90%;
+        }
+    </style>
 </head>
 <body>
-<table>
-    <tr>
-        <td>WSDL Location</td>
-        <td><input id="wsdl" name="wsdl"></td>
-        <td><input type="button" onclick="getOperations()" value="find"></td>
-    </tr>
-    <tr>
-        <td>Operation</td>
-        <td><select id="operation">
-            <option value="">请选择</option>
-        </select>
-        </td>
-    </tr>
-</table>
-<table id="paramTable">
-</table>
-<input value="invoke" type="button" onclick="invoke()"/>
+<div>
+    <table>
+        <tr>
+            <td>WSDL Location</td>
+            <td><input id="wsdl" name="wsdl"></td>
+            <td><input type="button" onclick="getOperations()" value="find"></td>
+        </tr>
+        <tr>
+            <td>Operation</td>
+            <td>
+                <select id="operation">
+                    <option value="">请选择</option>
+                </select>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="div_param">
+    <table id="paramTable">
+    </table>
+</div>
+<div>
+    <input value="invoke" type="button" onclick="invoke()"/>
+</div>
 <textarea id="result">
 
 </textarea>
@@ -66,8 +84,8 @@
                 $('#paramTable').empty();
                 for (var i = 0; i < data.length; i++) {
                     var tr = '<tr>' +
-                            '<td>Parameter'+(i+1)+':<input readonly value="'+data[i]['FIELD_NAME']+'"/></td>' +
-                            '<td>Type:<input readonly value="'+data[i]['FIELD_TYPE']+'"/></td>' +
+                            '<td>Parameter' + (i + 1) + ':<input disabled value="' + data[i]['FIELD_NAME'] + '"/></td>' +
+                            '<td>Type:<input disabled value="' + data[i]['FIELD_TYPE'] + '"/></td>' +
                             '<td>value:<input class="valinput"/></td>' +
                             '</tr>';
                     $('#paramTable').append(tr)
@@ -75,29 +93,20 @@
             }
         });
     }
-    function invoke(){
-        var paramData=[]
-        $('.valinput').each(function(i,element){
+    function invoke() {
+        var paramData = []
+        $('.valinput').each(function (i, element) {
             paramData.push($(this).val())
         })
-        console.log(paramData)
-        /*
+        var paramStr = JSON.stringify(paramData);
         $.ajax({
             url: '<%=request.getContextPath()%>/wscaller/invoke',
-            data: {wsdl: $('#wsdl').val(), operation: $('#operation').val()},
-            dataType: 'json',
+            data: {wsdl: $('#wsdl').val(), operation: $('#operation').val(), paramStr: paramStr},
+            dataType: 'text',
             success: function (data) {
-                $('#paramTable').empty();
-                for (var i = 0; i < data.length; i++) {
-                    var tr = '<tr>' +
-                            '<td>Parameter'+(i+1)+':<input readonly value="'+data[i]['FIELD_NAME']+'"/></td>' +
-                            '<td>Type:<input readonly value="'+data[i]['FIELD_TYPE']+'"/></td>' +
-                            '<td>value:<input id="value'+(i+1)+'"/></td>' +
-                            '</tr>';
-                    $('#paramTable').append(tr)
-                }
+                $('#result').val(data)
             }
-        });*/
+        });
     }
 </script>
 </html>

@@ -123,7 +123,6 @@ public class WebServiceUtil {
         Client client = dcf.createClient(wsdl);
 //        //添加头信息 以便验证
 //		client.getOutInterceptors().add(new ClientInterceptor("admin", "admin"));
-        client.getOutInterceptors().add(new InfoInterceptor());
         HTTPClientPolicy policy = new HTTPClientPolicy();
         policy.setConnectionTimeout(10 * 1000);
         policy.setReceiveTimeout(10 * 60 * 1000);
