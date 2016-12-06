@@ -13,13 +13,6 @@ import org.apache.cxf.phase.Phase;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-/**
- * <p>类描述：  </p>
- * <p>修改记录 ---------------- </p>
- * <p>修改人：王成委 </p>
- * <p>修改时间：2014-5-10 下午03:58:10  </p>
- * <p>修改备注：  </p>
- */
 public class ClientInterceptor extends AbstractPhaseInterceptor<SoapMessage> {
 
     private String username;

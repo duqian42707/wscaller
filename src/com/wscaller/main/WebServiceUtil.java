@@ -1,9 +1,11 @@
 package com.wscaller.main;
 
+import com.wscaller.interceptor.ClientInterceptor;
 import com.wscaller.util.EncryptUtil;
 import org.apache.cxf.endpoint.Client;
 import org.apache.cxf.endpoint.Endpoint;
 import org.apache.cxf.jaxws.endpoint.dynamic.JaxWsDynamicClientFactory;
+import org.apache.cxf.phase.AbstractPhaseInterceptor;
 import org.apache.cxf.service.model.BindingInfo;
 import org.apache.cxf.service.model.BindingMessageInfo;
 import org.apache.cxf.service.model.BindingOperationInfo;
@@ -139,10 +141,15 @@ public class WebServiceUtil {
      * @throws Exception
      */
     public static Object[] invoke(String wsdl, String operation, List<String> params) throws Exception {
+        return invoke(wsdl,operation,params,null);
+    }
+    public static Object[] invoke(String wsdl, String operation, List<String> params,AbstractPhaseInterceptor interceptor) throws Exception {
         JaxWsDynamicClientFactory dcf = JaxWsDynamicClientFactory.newInstance();
         Client client = dcf.createClient(wsdl);
-//        //添加头信息 以便验证
-//		client.getOutInterceptors().add(new ClientInterceptor("admin", "admin"));
+        //添加头信息 以便验证
+        if(interceptor!=null){
+		    client.getOutInterceptors().add(interceptor);
+        }
         HTTPClientPolicy policy = new HTTPClientPolicy();
         policy.setConnectionTimeout(10 * 1000);
         policy.setReceiveTimeout(10 * 60 * 1000);
@@ -183,12 +190,23 @@ public class WebServiceUtil {
      * @throws Exception
      */
     public static String invokeForString(String wsdl, String operation, List<String> params) throws Exception {
-        Object[] objects = invoke(wsdl, operation, params);
+        return invokeForString(wsdl,operation,params,null);
+    }
+    public static String invokeForString(String wsdl, String operation, List<String> params,AbstractPhaseInterceptor interceptor) throws Exception {
+        Object[] objects = invoke(wsdl, operation, params,interceptor);
         if (objects != null && objects.length > 0) {
             if (objects[0] instanceof String) {
                 return (String) objects[0];
             }
         }
         return null;
+    }
+    public static void main(String[] args) throws Exception {
+        String wsdl="";
+        String operation="";
+        List params = new ArrayList();
+//        params.add();
+        ClientInterceptor interceptor = new ClientInterceptor("admin", "admin");
+        WebServiceUtil.invokeForString(wsdl,operation,params,interceptor);
     }
 }

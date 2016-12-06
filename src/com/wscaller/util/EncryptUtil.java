@@ -7,4 +7,7 @@ public class EncryptUtil {
     public static String getEncrypt(String origin){
         return origin;
     }
+    public static void main(String[] args){
+        Math.random();
+    }
 }
